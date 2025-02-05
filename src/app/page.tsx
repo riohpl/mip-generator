@@ -6,22 +6,37 @@ import { Button } from "@/components/ui/button";
 import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import { useState } from "react";
 import { carouselNormal, htmlParams } from "@/utils/carousel-normal";
-import { testHTML } from "@/utils/test";
 import { Input } from "@/components/ui/input";
+import { useLocalStorage } from "react-use";
 type content = {
   id: number;
   type: string;
   content: string;
 };
 export default function Home() {
-  const [isHeaderVisible, setIsHeaderVissible] = useState<boolean>(false);
-  const [isCarouselVisible, setIsCarouselVissible] = useState<boolean>(false);
-  const [isContentVisible, setIsContentVissible] = useState<boolean>(false);
+  const [isHeaderVisible, setIsHeaderVissible] = useLocalStorage<boolean>(
+    "isHeaderVisible",
+    false
+  );
+  const [isCarouselVisible, setIsCarouselVissible] = useLocalStorage<boolean>(
+    "isCarouselVisible",
+    false
+  );
+  const [isContentVisible, setIsContentVissible] = useLocalStorage<boolean>(
+    "isContentVisible",
+    false
+  );
 
-  const [headerContent, setHeaderContent] = useState<content[]>([]);
-  const [carouselContent, setCarouselContent] = useState<content[]>([]);
-  const [content, setContent] = useState<content[]>([]);
-  const [cta, setCta] = useState<string>("");
+  const [headerContent, setHeaderContent] = useLocalStorage<content[]>(
+    "headerContent",
+    []
+  );
+  const [carouselContent, setCarouselContent] = useLocalStorage<content[]>(
+    "carouselContent",
+    []
+  );
+  const [content, setContent] = useLocalStorage<content[]>("content", []);
+  const [cta, setCta] = useLocalStorage<string>("cta", "");
 
   const toggleCheckBox = (checkType: toggleCheckType) => {
     if (checkType.type === "header") {
@@ -34,6 +49,7 @@ export default function Home() {
   };
   const handleCtaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCta(e.target.value);
+    console.log(cta, "CTA");
   };
   const generateMip = () => {
     console.log(content, "CONTENTSS");
@@ -84,6 +100,7 @@ export default function Home() {
               <div className="flex gap-3">
                 <Input
                   type="text"
+                  value={cta}
                   placeholder="Enter your prompt"
                   onChange={(e) => handleCtaChange(e)}
                 />

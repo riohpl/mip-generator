@@ -703,11 +703,11 @@ video {
         })
         .join("")}
       <section id="content" class="overflow-y-scroll">
-        <div class="relative w-full max-w-[90%] overflow-hidden mx-auto rounded-xl ">
+        <div class="relative w-full max-w-[90%] overflow-hidden mx-auto">
           <div id="slider" class="flex w-full transition-transform duration-500 ease-out mx-auto ">
             ${params.slide
               .map((slide) => {
-                return `<img class="slide${slide.id} card"/>`;
+                return `<img class="slide${slide.id} card" alt="Slider"/>`;
               })
               .join("")}
           </div>                
