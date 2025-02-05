@@ -4,7 +4,7 @@ import CardContainer from "@/components/CardContainer";
 import CheckContainer, { toggleCheckType } from "@/components/CheckContainer";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { carouselNormal, htmlParams } from "@/utils/carousel-normal";
 import { Input } from "@/components/ui/input";
 import { useLocalStorage } from "react-use";
@@ -14,6 +14,12 @@ type content = {
   content: string;
 };
 export default function Home() {
+  const [isClient, setIsClient] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const [isHeaderVisible, setIsHeaderVissible] = useLocalStorage<boolean>(
     "isHeaderVisible",
     false
@@ -49,33 +55,55 @@ export default function Home() {
   };
   const handleCtaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCta(e.target.value);
-    console.log(cta, "CTA");
   };
-  const generateMip = () => {
-    console.log(content, "CONTENTSS");
-    const params: htmlParams = {
-      header: headerContent,
-      slide: carouselContent,
-      content: content,
-      cta: cta,
-    };
-    console.log(params, "PARAMS");
-    const html = carouselNormal(params);
-    console.log(html, "HTML");
+  const generateMip = async () => {
+    setIsGenerating(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      const params: htmlParams = {
+        header: headerContent,
+        slide: carouselContent,
+        content: content,
+        cta: cta,
+      };
+      const html = carouselNormal(params);
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "mip.html";
+      a.click();
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+  const clearAllInputs = () => {
+    setHeaderContent([]);
+    setCarouselContent([]);
+    setContent([]);
+    setCta("");
+    setIsHeaderVissible(false);
+    setIsCarouselVissible(false);
+    setIsContentVissible(false);
+  };
+  if (!isClient) {
+    return null;
+  }
 
-    const blob = new Blob([html], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "mip.html";
-    a.click();
-  };
   return (
     <div className="flex justify-center p-10">
-      <Card className="w-1/2">
+      <Card className="xl:w-2/5 xs:w-80">
         <CardHeader>
           <CardTitle className="text-4xl text-center">MIP Generator</CardTitle>
-          <CheckContainer toggleBox={toggleCheckBox} />
+          <Button onClick={clearAllInputs} variant="secondary">
+            Clear All
+          </Button>
+          <CheckContainer
+            toggleBox={toggleCheckBox}
+            isHeaderVisible={isHeaderVisible}
+            isCarouselVisible={isCarouselVisible}
+            isContentVisible={isContentVisible}
+          />
           <CardContent className="flex flex-col gap-2">
             <CardContainer
               title="Header"
