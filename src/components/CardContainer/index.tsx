@@ -1,12 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 type Props = {
   title: string;
   isVissible?: boolean;
-  setContent: React.Dispatch<React.SetStateAction<content[]>>;
+  setContent: any;
   content: content[];
 };
 

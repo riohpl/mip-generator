@@ -15,7 +15,6 @@ type content = {
 };
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -36,12 +35,15 @@ export default function Home() {
   const [headerContent, setHeaderContent] = useLocalStorage<content[]>(
     "headerContent",
     []
-  );
+  ) as unknown as [content[], (value: content[]) => void, () => void];
   const [carouselContent, setCarouselContent] = useLocalStorage<content[]>(
     "carouselContent",
     []
-  );
-  const [content, setContent] = useLocalStorage<content[]>("content", []);
+  ) as unknown as [content[], (value: content[]) => void, () => void];
+  const [content, setContent] = useLocalStorage<content[]>(
+    "content",
+    []
+  ) as unknown as [content[], (value: content[]) => void, () => void];
   const [cta, setCta] = useLocalStorage<string>("cta", "");
 
   const toggleCheckBox = (checkType: toggleCheckType) => {
@@ -57,25 +59,20 @@ export default function Home() {
     setCta(e.target.value);
   };
   const generateMip = async () => {
-    setIsGenerating(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      const params: htmlParams = {
-        header: headerContent,
-        slide: carouselContent,
-        content: content,
-        cta: cta,
-      };
-      const html = carouselNormal(params);
-      const blob = new Blob([html], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "mip.html";
-      a.click();
-    } finally {
-      setIsGenerating(false);
-    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    const params: htmlParams = {
+      header: headerContent,
+      slide: carouselContent,
+      content: content,
+      cta: cta ?? "",
+    };
+    const html = carouselNormal(params);
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "mip.html";
+    a.click();
   };
   const clearAllInputs = () => {
     setHeaderContent([]);
@@ -100,9 +97,9 @@ export default function Home() {
           </Button>
           <CheckContainer
             toggleBox={toggleCheckBox}
-            isHeaderVisible={isHeaderVisible}
-            isCarouselVisible={isCarouselVisible}
-            isContentVisible={isContentVisible}
+            isHeaderVisible={isHeaderVisible ?? false}
+            isCarouselVisible={isCarouselVisible ?? false}
+            isContentVisible={isContentVisible ?? false}
           />
           <CardContent className="flex flex-col gap-2">
             <CardContainer
