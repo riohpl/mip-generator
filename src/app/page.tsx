@@ -55,17 +55,27 @@ export default function Home() {
       setIsContentVissible(checkType.isChecked);
     }
   };
-  const handleCtaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCta(e.target.value);
+  const handleCtaChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64 = e.target?.result as string;
+        setCta(base64);
+      };
+      reader.readAsDataURL(file);
+    }
   };
   const generateMip = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 100));
+
     const params: htmlParams = {
       header: headerContent,
       slide: carouselContent,
       content: content,
       cta: cta ?? "",
     };
+
+    console.log(params, "PARAMS");
     const html = carouselNormal(params);
     const blob = new Blob([html], { type: "text/html" });
     const url = URL.createObjectURL(blob);
@@ -89,7 +99,7 @@ export default function Home() {
 
   return (
     <div className="flex justify-center p-10">
-      <Card className="xl:w-2/5 md:w-3/4 xs:w-80 ">
+      <Card className="xl:w-2/5 md:w-3/4   xs:w-80 ">
         <CardHeader>
           <CardTitle className="text-4xl text-center">MIP Generator</CardTitle>
           <Button onClick={clearAllInputs} variant="secondary">
@@ -98,7 +108,7 @@ export default function Home() {
           <CheckContainer
             toggleBox={toggleCheckBox}
             isHeaderVisible={isHeaderVisible ?? false}
-            isCarouselVisible={isCarouselVisible ?? false}
+          isCarouselVisible={isCarouselVisible ?? false}
             isContentVisible={isContentVisible ?? false}
           />
           <CardContent className="flex flex-col gap-2">
@@ -124,9 +134,8 @@ export default function Home() {
               <h3 className="text-xl font-bold">CTA</h3>
               <div className="flex gap-3">
                 <Input
-                  type="text"
-                  value={cta}
-                  placeholder="Enter your prompt"
+                  type="file"
+                  accept="image/*"
                   onChange={(e) => handleCtaChange(e)}
                 />
               </div>
