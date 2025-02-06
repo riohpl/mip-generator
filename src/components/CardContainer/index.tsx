@@ -18,7 +18,7 @@ type content = {
 const CardContainer = (props: Props) => {
   const { setContent, content, title } = props;
 
-  const addContent = () => {
+  const addContent = () => {4
     setContent([
       ...content,
       { id: content.length + 1, type: title, content: "" },
@@ -55,7 +55,7 @@ const CardContainer = (props: Props) => {
   return props.isVissible ? (
     <div className="mt-7 flex flex-col gap-3">
       <h3 className="text-xl font-bold">{props.title}</h3>
-      <Button onClick={addContent}>Add Content</Button>
+      <Button onClick={addContent}>Add {props.title}</Button>
       {contentList}
     </div>
   ) : null;

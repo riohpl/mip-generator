@@ -89,7 +89,7 @@ export default function Home() {
 
   return (
     <div className="flex justify-center p-10">
-      <Card className="xl:w-2/5 xs:w-80">
+      <Card className="xl:w-2/5 md:w-3/4 xs:w-80 ">
         <CardHeader>
           <CardTitle className="text-4xl text-center">MIP Generator</CardTitle>
           <Button onClick={clearAllInputs} variant="secondary">
