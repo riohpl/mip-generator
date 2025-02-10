@@ -9,6 +9,14 @@ import { htmlParams } from "@/utils/htmlParamTypes";
 import { Input } from "@/components/ui/input";
 import { useLocalStorage } from "react-use";
 import { carouselMain } from "@/utils/carousel-main";
+import { Dialog } from "@/components/ui/dialog";
+import {
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { DialogContent } from "@/components/ui/dialog";
 
 type content = {
   id: number;
@@ -18,6 +26,7 @@ type content = {
 
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
+  const [mipName, setMipName] = useState<string>("");
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -79,6 +88,7 @@ export default function Home() {
       slide: carouselContent,
       content: content,
       cta: cta ?? "",
+      title: mipName,
     };
 
     console.log(params, "PARAMS");
@@ -86,8 +96,10 @@ export default function Home() {
     const blob = new Blob([html], { type: "text/html" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
+    const date = new Date();
+    const formatted = date.toLocaleDateString("en-CA");
     a.href = url;
-    a.download = "mip.html";
+    a.download = `${mipName}_colanot_mip_${formatted}.html`;
     a.click();
   };
   const clearAllInputs = () => {
@@ -123,7 +135,6 @@ export default function Home() {
             isContentVisible={isContentVisible ?? false}
           />
         </CardHeader>
-
         <CardContent className="flex flex-col gap-2 p-6">
           <CardContainer
             title="Header"
@@ -153,7 +164,24 @@ export default function Home() {
               />
             </div>
           </div>
-          <Button onClick={generateMip}>Generate</Button>
+          <Dialog>
+            <DialogTrigger className="w-full">
+              <Button className="w-full">Generate MIP</Button>{" "}
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Please Insert MIP Name!</DialogTitle>
+                <DialogDescription className="space-y-3">
+                  <Input
+                    type="text"
+                    value={mipName}
+                    onChange={(e) => setMipName(e.target.value)}
+                  />
+                  <Button onClick={generateMip}>Generate</Button>
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
         </CardContent>
       </Card>
     </div>

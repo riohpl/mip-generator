@@ -5,8 +5,10 @@ type content = {
 };
 
 export type htmlParams = {
+  title: string;
   slide: content[];
   header: content[];
   content: content[];
   cta: string;
 };
+
