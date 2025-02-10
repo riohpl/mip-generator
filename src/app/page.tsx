@@ -8,11 +8,14 @@ import { useState, useEffect } from "react";
 import { carouselNormal, htmlParams } from "@/utils/carousel-normal";
 import { Input } from "@/components/ui/input";
 import { useLocalStorage } from "react-use";
+import { carouselMain } from "@/utils/carousel-main";
+
 type content = {
   id: number;
   type: string;
   content: string;
 };
+
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
@@ -36,14 +39,17 @@ export default function Home() {
     "headerContent",
     []
   ) as unknown as [content[], (value: content[]) => void, () => void];
+
   const [carouselContent, setCarouselContent] = useLocalStorage<content[]>(
     "carouselContent",
     []
   ) as unknown as [content[], (value: content[]) => void, () => void];
+
   const [content, setContent] = useLocalStorage<content[]>(
     "content",
     []
   ) as unknown as [content[], (value: content[]) => void, () => void];
+
   const [cta, setCta] = useLocalStorage<string>("cta", "");
 
   const toggleCheckBox = (checkType: toggleCheckType) => {
@@ -55,7 +61,8 @@ export default function Home() {
       setIsContentVissible(checkType.isChecked);
     }
   };
-  const handleCtaChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+
+  const handleCtaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -67,7 +74,6 @@ export default function Home() {
     }
   };
   const generateMip = async () => {
-
     const params: htmlParams = {
       header: headerContent,
       slide: carouselContent,
@@ -108,7 +114,7 @@ export default function Home() {
           <CheckContainer
             toggleBox={toggleCheckBox}
             isHeaderVisible={isHeaderVisible ?? false}
-          isCarouselVisible={isCarouselVisible ?? false}
+            isCarouselVisible={isCarouselVisible ?? false}
             isContentVisible={isContentVisible ?? false}
           />
           <CardContent className="flex flex-col gap-2">
