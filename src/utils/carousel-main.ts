@@ -1,15 +1,4 @@
-type content = {
-  id: number;
-  type: string;
-  content: string;
-};
-
-export type htmlParams = {
-  slide: content[];
-  header: content[];
-  content: content[];
-  cta: string;
-};
+import { htmlParams } from "./htmlParamTypes";
 
 export const carouselMain = (params: htmlParams) => {
   return `<!DOCTYPE html>
@@ -97,6 +86,14 @@ export const carouselMain = (params: htmlParams) => {
       .scroll-hidden::-webkit-scrollbar {
         display: none;
       }
+      * {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+      }
+
+      *::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+      }
     </style>
   </head>
   <body>
@@ -129,7 +126,7 @@ export const carouselMain = (params: htmlParams) => {
              .join("")}
         <div class="p-5 w-full fixed bottom-0 mx-auto">
           <button id="yellowBtn" class="cta w-full flex justify-center mx-auto pulse-button " onclick="mraid.open()">
-            <img class="w-full max-w-[300px] btn-shopnow " alt="Shop Now">
+            <img class="w-full max-w-[300px] md:max-w-[500px] btn-shopnow " alt="Shop Now">
           </button>
         </div>
       </section>
@@ -268,6 +265,8 @@ export const carouselMain = (params: htmlParams) => {
           slidesToShow: 1,
           adaptiveHeight: true,
           arrows: true,
+          autoplay: true,
+          autoplaySpeed: 2000,
         });
         function createCustomDots() {
           const slideCount = $carousel.slick("getSlick").slideCount;
