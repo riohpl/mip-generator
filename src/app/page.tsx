@@ -5,7 +5,7 @@ import CheckContainer, { toggleCheckType } from "@/components/CheckContainer";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import { useState, useEffect } from "react";
-import { htmlParams } from "@/utils/carousel-normal";
+import { htmlParams } from "@/utils/htmlParamTypes";
 import { Input } from "@/components/ui/input";
 import { useLocalStorage } from "react-use";
 import { carouselMain } from "@/utils/carousel-main";
@@ -105,50 +105,56 @@ export default function Home() {
 
   return (
     <div className="flex justify-center p-10">
-      <Card className="xl:w-2/5 md:w-3/4   xs:w-80 ">
-        <CardHeader>
+      <Card className="xl:w-2/5 md:w-3/4   xs:w-80  p-10">
+        <CardHeader className="p-0 space-y-3">
           <CardTitle className="text-4xl text-center">MIP Generator</CardTitle>
-          <Button onClick={clearAllInputs} variant="secondary">
-            Clear All
-          </Button>
+          <div className="flex gap-3">
+            <Button onClick={clearAllInputs} variant="secondary">
+              Clear All
+            </Button>
+            <Button onClick={clearAllInputs} variant="outline">
+              Add Landscape Format{" "}
+            </Button>
+          </div>
           <CheckContainer
             toggleBox={toggleCheckBox}
             isHeaderVisible={isHeaderVisible ?? false}
             isCarouselVisible={isCarouselVisible ?? false}
             isContentVisible={isContentVisible ?? false}
           />
-          <CardContent className="flex flex-col gap-2">
-            <CardContainer
-              title="Header"
-              isVissible={isHeaderVisible}
-              content={headerContent}
-              setContent={setHeaderContent}
-            />
-            <CardContainer
-              title="Carousel"
-              isVissible={isCarouselVisible}
-              content={carouselContent}
-              setContent={setCarouselContent}
-            />
-            <CardContainer
-              title="Content"
-              isVissible={isContentVisible}
-              content={content}
-              setContent={setContent}
-            />
-            <div className="mt-7 flex flex-col gap-3">
-              <h3 className="text-xl font-bold">CTA</h3>
-              <div className="flex gap-3">
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleCtaChange(e)}
-                />
-              </div>
-            </div>
-          </CardContent>
-          <Button onClick={generateMip}>Generate</Button>
         </CardHeader>
+
+        <CardContent className="flex flex-col gap-2 p-6">
+          <CardContainer
+            title="Header"
+            isVissible={isHeaderVisible}
+            content={headerContent}
+            setContent={setHeaderContent}
+          />
+          <CardContainer
+            title="Carousel"
+            isVissible={isCarouselVisible}
+            content={carouselContent}
+            setContent={setCarouselContent}
+          />
+          <CardContainer
+            title="Content"
+            isVissible={isContentVisible}
+            content={content}
+            setContent={setContent}
+          />
+          <div className="mt-7 flex flex-col gap-3">
+            <h3 className="text-xl font-bold">CTA</h3>
+            <div className="flex gap-3">
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleCtaChange(e)}
+              />
+            </div>
+          </div>
+          <Button onClick={generateMip}>Generate</Button>
+        </CardContent>
       </Card>
     </div>
   );

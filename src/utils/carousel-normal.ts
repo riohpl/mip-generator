@@ -1,15 +1,4 @@
-type content = {
-  id: number;
-  type: string;
-  content: string;
-};
-
-export type htmlParams = {
-  slide: content[];
-  header: content[];
-  content: content[];
-  cta: string;
-};
+import { htmlParams } from "./htmlParamTypes";
 
 export const carouselNormal = (params: htmlParams) => {
   return `<!DOCTYPE html>
