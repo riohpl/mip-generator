@@ -273,30 +273,29 @@ export const carouselMain = (params: htmlParams) => {
           const slideCount = $carousel.slick("getSlick").slideCount;
           console.log(slideCount);
           for (let i = 0; i < slideCount; i++) {
-            const dot = $(` + "<div class='custom-dot' data-slide='${i}'></div>" + "`);"+
-            "$"+"customDots.append(dot);"+
-          "}"+
-          "$"+"$('.custom-dot').first().addClass('active');"+
-        "}"+
-        "$"+"carousel.on(" +
-          'beforeChange'+","+
-          "function (event, slick, currentSlide, nextSlide)" + "{" +
-            "$"+"('.custom-dot').removeClass('active');"+
-            "$(`.custom-dot[data-slide='${nextSlide}']`).addClass('active');" +
-          "}"+
-        ");"+
-        "$(document).on('click', '.custom-dot', function ()" +"{" +
-          "const slideIndex = $(this).data('slide');"+
-          "$(this).addClass('clicked');"+
-          "setTimeout(() =>" + "{"+
-           "$(this).removeClass('clicked');"+
-          "}, 200);"+
-          "$"+"carousel.slick('slickGoTo', slideIndex);"+
-        "}"+
-        ");"+
-        "createCustomDots();"+
-      "});"+
-  "  </script>"+
-"</body>"+
-"</html>"`
-}; 
+            const dot = $("<div class='custom-dot' data-slide='" + i + "'></div>");
+            $customDots.append(dot);
+          }
+          $('.custom-dot').first().addClass('active');
+        }
+        
+        $carousel.on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+          $('.custom-dot').removeClass('active');
+          $(".custom-dot[data-slide='" + nextSlide + "']").addClass('active');
+        });
+        
+        $(document).on('click', '.custom-dot', function () {
+          const slideIndex = $(this).data('slide');
+          $(this).addClass('clicked');
+          setTimeout(() => {
+            $(this).removeClass('clicked');
+          }, 200);
+          $carousel.slick('slickGoTo', slideIndex);
+        });
+        
+        createCustomDots();
+      });
+    </script>
+</body>
+</html>`;
+};

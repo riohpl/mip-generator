@@ -5,7 +5,7 @@ import CheckContainer, { toggleCheckType } from "@/components/CheckContainer";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import { useState, useEffect } from "react";
-import { carouselNormal, htmlParams } from "@/utils/carousel-normal";
+import { htmlParams } from "@/utils/carousel-normal";
 import { Input } from "@/components/ui/input";
 import { useLocalStorage } from "react-use";
 import { carouselMain } from "@/utils/carousel-main";
@@ -82,7 +82,7 @@ export default function Home() {
     };
 
     console.log(params, "PARAMS");
-    const html = carouselNormal(params);
+    const html = carouselMain(params);
     const blob = new Blob([html], { type: "text/html" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
