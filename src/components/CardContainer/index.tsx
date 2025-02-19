@@ -8,8 +8,8 @@ type Props = {
   isVissible?: boolean;
   setContent: (content: content[]) => void;
   content: content[];
+  navImage?: boolean;
 };
-
 
 type content = {
   id: number;
@@ -17,7 +17,7 @@ type content = {
   content: string;
 };
 const CardContainer = (props: Props) => {
-  const { setContent, content, title } = props;
+  const { setContent, content, title, navImage } = props;
   const addContent = () => {
     setContent([
       ...content,

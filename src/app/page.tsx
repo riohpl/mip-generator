@@ -17,6 +17,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DialogContent } from "@/components/ui/dialog";
+import PortraitComponent from "@/components/PortraitComponent";
+import LandscapeComponent from "@/components/LandscapeComponent";
+import { Separator } from "@/components/ui/separator";
 
 type content = {
   id: number;
@@ -102,6 +105,7 @@ export default function Home() {
     a.download = `${mipName}_colanot_mip_${formatted}.html`;
     a.click();
   };
+
   const clearAllInputs = () => {
     setHeaderContent([]);
     setCarouselContent([]);
@@ -136,37 +140,23 @@ export default function Home() {
           />
         </CardHeader>
         <CardContent className="flex flex-col gap-2 p-6">
-          <CardContainer
-            title="Header"
-            isVissible={isHeaderVisible}
-            content={headerContent}
-            setContent={setHeaderContent}
-          />
-          <CardContainer
-            title="Carousel"
-            isVissible={isCarouselVisible}
-            content={carouselContent}
-            setContent={setCarouselContent}
-          />
-          <CardContainer
-            title="Content"
-            isVissible={isContentVisible}
+          <PortraitComponent
+            isHeaderVisible={isHeaderVisible ?? false}
+            isCarouselVisible={isCarouselVisible ?? false}
+            isContentVisible={isContentVisible ?? false}
+            headerContent={headerContent}
+            carouselContent={carouselContent}
             content={content}
+            handleCtaChange={handleCtaChange}
+            setHeaderContent={setHeaderContent}
+            setCarouselContent={setCarouselContent}
             setContent={setContent}
           />
-          <div className="mt-7 flex flex-col gap-3">
-            <h3 className="text-xl font-bold">CTA</h3>
-            <div className="flex gap-3">
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleCtaChange(e)}
-              />
-            </div>
-          </div>
+          <Separator className="my-5" />
+          <LandscapeComponent />
           <Dialog>
-            <DialogTrigger className="w-full">
-              <Button className="w-full">Generate MIP</Button>{" "}
+            <DialogTrigger asChild>
+              <Button className="w-full">Generate MIP</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>

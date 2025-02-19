@@ -1,12 +1,12 @@
 import { htmlParams } from "./htmlParamTypes";
 
-export const carouselMain = (params: htmlParams) => {
+export const templateMain = (params) => {
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${params.title}</title>
+    <title></title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <link
       rel="stylesheet"
@@ -19,21 +19,17 @@ export const carouselMain = (params: htmlParams) => {
       href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"
     />
     <style>
-      ${params.header
-        .map((header) => {
-          return `.header${header.id}{ content:url('${header.content}')}`;
-        })
-        .join("")}
-    ${params.content
-      .map((content) => {
-        return `.content${content.id}{ content:url('${content.content}')}`;
+${params
+  .map((item) => {
+    return item.contentContainer
+      .map((item_child) => {
+        return `.${item_child.contentName} {
+        content: url("${item_child.content}");
+    }`;
       })
-      .join("")}
-     ${params.slide
-       .map((slide) => {
-         return `.slide${slide.id}{ content:url('${slide.content}')}`;
-       })
-       .join("")}
+      .join("");
+  })
+  .join("")} 
      .btn-shopnow{
        content: url("${params.cta}")
         }
@@ -131,40 +127,16 @@ export const carouselMain = (params: htmlParams) => {
     </style>
   </head>
   <body>
-   <main class="bg-white container flex flex-col w-full max-w-[100%] h-screen overflow-hidden">
-      ${params.header
-        .map((header) => {
-          return ` <div class="w-full max-w-[100%] mx-auto flex justify-center items-center">
-         <img class="header${header.id} w-full" alt="header">
-        </div>`;
-        })
-        .join("")}
-      <section id="content" class="overflow-y-scroll">
-        <div class="relative w-full overflow-hidden mx-auto">
-          <div id="slider" class="flex w-full transition-transform duration-500 ease-out mx-auto owl-carousel">
-            ${params.slide
-              .map((slide) => {
-                return `<img class="slide${slide.id} card" alt="Slider"/>`;
-              })
-              .join("")}
-          </div> 
-          <div class="custom-dots"></div>               
-        </div>
-        <div class="dots-container w-full h-[10px] flex justify-center my-[5px] rounded-none"></div>
-           ${params.content
-             .map((content) => {
-               return ` <div class="w-full max-w-[100%] mx-auto flex justify-center items-center">
-         <img class="content${content.id} w-full" alt="content">
-        </div>`;
-             })
-             .join("")}
-        <div class="p-5 w-full fixed bottom-0 mx-auto">
-          <button id="yellowBtn" class="cta w-full flex justify-center mx-auto pulse-button " onclick="mraid.open()">
-            <img class="w-full max-w-[300px] md:max-w-[500px] btn-shopnow " alt="Shop Now">
-          </button>
-        </div>
-      </section>
-    </main>
+${params
+  .map((el) => {
+    return el.htmlContent;
+  })
+  .join("")}
+    <div class="p-5 w-full fixed bottom-0 mx-auto">
+      <button id="yellowBtn" class="cta w-full flex justify-center mx-auto pulse-button " onclick="mraid.open()">
+        <img class="w-full max-w-[300px] md:max-w-[500px] btn-shopnow " alt="Shop Now">
+      </button>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"
