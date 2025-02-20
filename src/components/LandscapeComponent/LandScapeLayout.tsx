@@ -61,14 +61,21 @@ const generateRow = (children, id) => {
   return htmlObj;
 };
 const generateColumn = (children, id) => {
-  const { htmlContent, idTemp, contentContainer } = generateContent(children);
+  console.log(children, "CHILDREEEn");
+  console.log(children[0].type, "TYPEEEEEEE");
+  const generator =
+    children[0].type == "content"
+      ? generateContent(children)
+      : generateCarousel(children);
+  console.log(generator, "WHATTYPE");
+  const { htmlContent, idTemp, contentContainer } = generator;
   generateCarousel(children);
   const htmlObj = {
     id: id + idTemp,
     htmlContent: htmlContent,
     contentContainer,
   };
-  console.log(htmlObj);
+  console.log(htmlObj, "OBJECTE");
   return htmlObj;
 };
 
@@ -76,18 +83,16 @@ export function useLandscapeLayout() {
   const [layouts, setLayouts] = useState<LayoutType[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [generatedHtml, setGeneratedHtml] = useState([]);
-
   useEffect(() => {
     console.log(generatedHtml, "GENENEN");
   }, [generatedHtml]);
-
   const handleSubmit = async () => {
     console.log(layouts);
     const newHtmlContents = [];
     layouts.forEach((layout) => {
       if (layout.type === "column") {
         const htmlObj = generateColumn(layout.children, layout.id);
-        const exists = generatedHtml.some((item) => {
+        const exists = generatedHtml?.some((item) => {
           return item.id === htmlObj.id;
         });
         if (!exists) {
@@ -96,7 +101,7 @@ export function useLandscapeLayout() {
       }
       if (layout.type === "row") {
         const htmlObj = generateRow(layout.children, layout.id);
-        const exists = generatedHtml.some((item) => {
+        const exists = generatedHtml?.some((item) => {
           return item.id === htmlObj.id;
         });
         if (!exists) {
@@ -106,7 +111,6 @@ export function useLandscapeLayout() {
     });
     setGeneratedHtml((prev) => {
       const updatedHtml = [...prev, ...newHtmlContents];
-
       const html = templateMain(updatedHtml);
       const blob = new Blob([html], { type: "text/html" });
       const url = URL.createObjectURL(blob);
@@ -116,7 +120,6 @@ export function useLandscapeLayout() {
       a.href = url;
       a.download = `test_colanot_mip_${formatted}.html`;
       a.click();
-
       return updatedHtml;
     });
   };
