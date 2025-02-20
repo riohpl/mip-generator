@@ -58,6 +58,8 @@ const generateRow = (children, id) => {
     htmlContent: htmlContent,
     contentContainer,
   };
+  console.log(htmlObj, "ROW");
+
   return htmlObj;
 };
 const generateColumn = (children, id) => {
@@ -75,7 +77,7 @@ const generateColumn = (children, id) => {
     htmlContent: htmlContent,
     contentContainer,
   };
-  console.log(htmlObj, "OBJECTE");
+  console.log(htmlObj, "COLUMN");
   return htmlObj;
 };
 
@@ -85,43 +87,42 @@ export function useLandscapeLayout() {
   const [generatedHtml, setGeneratedHtml] = useState([]);
   useEffect(() => {
     console.log(generatedHtml, "GENENEN");
-  }, [generatedHtml]);
+  }, [generatedHtml, layouts]);
+
+  let downloadUrl = null; // Store the generated URL
+
   const handleSubmit = async () => {
     console.log(layouts);
     const newHtmlContents = [];
+
     layouts.forEach((layout) => {
       if (layout.type === "column") {
         const htmlObj = generateColumn(layout.children, layout.id);
-        const exists = generatedHtml?.some((item) => {
-          return item.id === htmlObj.id;
-        });
-        if (!exists) {
+        if (!generatedHtml?.some((item) => item.id === htmlObj.id)) {
           newHtmlContents.push(htmlObj);
         }
       }
       if (layout.type === "row") {
         const htmlObj = generateRow(layout.children, layout.id);
-        const exists = generatedHtml?.some((item) => {
-          return item.id === htmlObj.id;
-        });
-        if (!exists) {
+        if (!generatedHtml?.some((item) => item.id === htmlObj.id)) {
           newHtmlContents.push(htmlObj);
         }
       }
     });
-    setGeneratedHtml((prev) => {
-      const updatedHtml = [...prev, ...newHtmlContents];
-      const html = templateMain(updatedHtml);
-      const blob = new Blob([html], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      const date = new Date();
-      const formatted = date.toLocaleDateString("en-CA");
-      a.href = url;
-      a.download = `test_colanot_mip_${formatted}.html`;
-      a.click();
-      return updatedHtml;
-    });
+
+    const html = templateMain(newHtmlContents);
+    const blob = new Blob([html], { type: "text/html" });
+    if (downloadUrl) {
+      URL.revokeObjectURL(downloadUrl);
+    }
+    downloadUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const date = new Date().toLocaleDateString("en-CA");
+    a.href = downloadUrl;
+    a.download = `test_colanot_mip_${date}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   const handleContentTypeChange = (layoutId: number, value: string) => {
